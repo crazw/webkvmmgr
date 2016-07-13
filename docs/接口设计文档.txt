@@ -1,0 +1,545 @@
+接口地址：
+
+1.POST https://xxx:8080/api/kvm/
+
+2.POST https://xxx:8080/api/task/CASxxxxxx
+
+
+虚拟机配置
+
+{
+
+    req:"vm.conf",
+
+    sn : "xx",
+
+    body: [
+
+        {
+
+            "create_time":"2010-01-01 00:00:00", # 创建时间
+
+            "create_time":"2010-01-01 00:00:00", # 此数据生成的刷新时间
+
+            "name":"xingyu", # 虚拟机名称
+
+            "type":"", # 虚拟机类别 0-linux 
+
+            "os":"Linux", # 安装时内置操作系统信息
+
+            "cpu_num":2, # 分配的cpu数量
+
+            "memory":512000000, # 分配的内存数 单位：字节
+
+            "disk":[
+
+                { name: "1", target: "", size: "", path: "" ,format: "", bus: "" }，
+
+                { name: "2", target: "",  size: "", path: "" ,format: ""， bus: "" }，
+
+            ], # 分配的磁盘信息
+
+            "network":[
+
+                { name: "eth0", link_way: "bridge",  linked:"", select: "eth0"}，
+
+                { name: "eth1", link_way: "bridge",  linked:"", select: "eth1"}，
+
+            ], # 分配网络信息
+
+            "snapshots":[
+
+                { name: "bk0", create_time: "",  comment:""}，
+
+                { name: "bk1", create_time: "",  comment:""}，
+
+            ] # 快照信息
+
+        }，
+
+        # 2号-xingyu虚拟机信息
+
+        { ... }, 
+
+    ]
+
+}
+
+虚拟机状态
+
+POST http://xxx:8080/api/kvm
+
+{
+
+    req : 'vm.status',
+
+    sn : 'xx',
+
+    body : [
+
+        # 1号-xingyu虚拟机信息
+
+        {
+
+             "create_time":"2010-01-01 00:00:00", # 此数据生成的刷新时间
+
+            "name":"xingyu", # 虚拟机名称
+
+            "status": 1, # 状态信息， 5--关机  1--运行,， 其它数字--其它状态
+
+            disk: [
+
+				{"name":"sda", "free": 40, "util":35},
+
+				{…}
+
+			]，
+
+            "cpu_idle": 20，   # cpu空 闲比 百 分比
+
+            "mem_usage": 49, # 内存占用 百分比
+
+			net:[
+
+				{"name":"sda", "type":"service", "in":35, "out":34, "ip": "xx", "mac":""},  //  单位Kbps 新加ip和mac字段
+
+				{...}
+
+			]           
+
+        },
+
+        # 2号-xingyu虚拟机信息
+
+        { ... }, 
+
+    ]
+
+}
+
+宿主机状态信息
+
+{
+
+    req : ‘host.status’,
+
+    sn : ‘xx’,
+
+    body : [
+
+        # 宿主机信息
+
+        { 
+
+            "update_time":"2010-01-01 00:00:00", # 此数据生成的刷新时间
+
+            "name":"__HOST", # 名称
+
+   			"ip" : "1.1.1.1", #出口IP
+
+            "status": 1, # 状 态信息， 0--关机  1--正常
+
+            "formula ": [1,2], # 支持的配方号集合
+
+            "version": "1.0.0", # 业务包版本
+
+            "libvirt_version": "1.0.0", # libvirt版本
+
+            "hv_version": "1.0.0", # hypervisor版本
+
+            "vm_files":[ # 虚 拟机文件信息
+
+                {
+
+                    name: "Centos6.7.iso", # 文件名
+
+                    type: 0, # 0--文件 1--文 件夹
+
+                    size: 123456,  # 文 件大小 或文件夹内所有内容大小
+
+                    path: "/home/vm_files/" , # 文件存放地址
+
+                    comment: "for xingyu" , # 备 注   !不要此字段，以免覆盖平台的comment
+
+                }，
+
+                { }，
+
+            ], 
+
+            "disk":[  # 分 配的磁盘信息
+
+                { source: "/dev/sda1", size: "10G", avail:"3G", pcent: "70" ,target: "/home/iso" , "util" : "30"}，
+
+                { source: "/dev/sda2", size: "10G", avail:"3G", pcent: "70%" ,target: "/home/iso2" , "util" : "30"}，
+
+            ], 
+
+			disk: [
+
+				{"name":"sda", "free": 40, "util":35},
+
+				{…}
+
+			]，
+
+            "total_mem": 1000000, # 总内存值，字节单位
+
+            "left_mem": 20000, # 剩余内存值，字节单位
+
+            "disk_usage": 40,  # 磁盘占用百分比
+
+            "cpu_idle": 20，   # cpu空闲比 百 分比
+
+            "mem_usage": 49, # 内存占用 百 分比
+
+		    "net":[
+
+				{"name":"sda", "type":"service", "in":35, "out":34},
+
+				{...}
+
+		    ]  
+
+			"monitor_traffic": [100,200], # 镜像网卡，流量值，[上 行流量，下行流量]，单位KBps
+
+            "service_traffic": [100,200], # 服务口，流量值，[上 行流量，下行流量]，单位KBps
+
+        }
+
+    ]
+
+}
+
+宿主机硬件信息
+
+{
+
+    req : ‘host.hw’,
+
+    sn : ‘xx’,
+
+    body: [
+
+        {
+
+            "total_mem": 1000000,   # 总 内存值，字节单位
+
+            "cpu_name": "Intel(R) Xeon(R) ",
+
+            "architecture ": "x86_64", 
+
+			"disk_size": 100000000,  # 总磁盘大小
+
+			disk: [
+
+				{"name":"sda", "size": 40},
+
+				{…}
+
+				]，
+
+		   	"data_disk_num": 6，  #数据盘数量
+
+		   	"cpus ": 16              # 总 共cpu个数
+        }
+
+    ]
+
+}
+
+宿主机任务状态信息
+
+{
+
+    req : ‘host.task_status’,
+
+    sn : ‘xx’,
+
+    body: [
+
+{
+
+            "task":[  # 处 理的任务状态
+
+                {
+
+                    id: 1, 
+
+                    title: "xxx", 
+
+                    status: 1, # 任 务当前处理的状态，0--刚接受，准备处理，1--正 在处理中， 2--处理完成， -1--处 理结束，但有故障  
+
+                    msg: xxx, #处 理异常的消息
+
+                    percent: 10, # 处 理进度百分比
+
+                    rev_time: "2016-05-10 11:00:00",   # 任 务接受的时间
+
+                    consuming: 3600, # 运 作已耗时，单位秒
+
+                }，
+
+                {.....}，
+
+            ],
+
+}
+
+    ]
+
+}
+
+
+
+
+
+# 新建某业务的虚拟机的任务（按照配方）
+
+{
+
+    "id":1, # 任务编号
+
+    "create_time": "2010-01-01 00:00:00", # 任 务创建时间
+
+    "age": 3600, # 任务有效期，单位秒，任务在有效期内才 能被认定和处理
+
+    "type": 1, # 1-新建虚拟机的任务
+
+    "vm_name": "xingyu", # 虚拟机的名称，虚拟机的名称，全网统一 命名
+
+    "formula": "", # 创建时用的配方代号，取值0-10？
+
+    "topology" : { "cpu" : 1, "disk" : 1}, #取值范围： cpu: 1/2/3   disk: 1/2
+
+    "cpu_num":2, # 分配的cpu数量
+
+    "memory":512000000, # 分 配的内存数 单位：字节
+
+    "disk_os ":30G, # os磁盘大小
+
+    "disk_data ":100G, # data磁盘大小
+
+    "install_method": 0, # 安装方法，0--以iso文件*.iso安装； 1--以镜像文件*.qcow2安装； 
+
+    "vm_file": "/home/iso/centos6.7-for-xingyu.iso", # 镜像文件存放路径
+
+    "father_id": '2-3', # ‘0-0’代表无父任务，符号 '-' 前面: 父任务类型,  后面: 父任务ID!!
+
+}
+
+
+
+# 修 改某业务的虚拟机的任务
+
+{
+
+    "id":1, # 任务编号
+
+    "create_time":"2010-01-01 00:00:00", # 任 务创建时间
+
+    "age":3600,  # 任务有效期，单位秒
+
+    "type":2,       # 2-修 改虚拟机配置的任务
+
+    "vm_name":"xingyu", # 虚拟机的名称，虚拟机的名称，全网统一 命名
+
+    "cpu":2, # cpu新的配置的数量
+
+    "mem":100000, # 内存新的配置的数量
+
+    "sysdisk_extend":0, # 系统磁盘需要增加的容量， 注意磁盘的大小只能增加，不能减少
+
+    "datadisk_extend":0, # 数据磁盘需要增加的容量， 注意磁盘的大小只能增加，不能减少
+
+    "father_id": '2-3', # ‘0-0’代表无父任务，符号 '-' 前面: 父任务类型,  后面: 父任务ID!!!
+
+}
+
+# 删 除某业务的虚拟机的任务
+
+{
+
+    "id":1, # 任务编号  
+
+    "create_time":"2010-01-01 00:00:00", # 任 务创建时间
+
+    "age":3600,  # 任务有效期，单位秒
+
+    "type":3,       # 3-删 除虚拟机的任务
+
+    "vm_name ":"xingyu", # 虚拟机的名称，虚拟机的名称，全网统一 命名
+
+    "delete_disk":0,       # 1-删 除虚拟机的disk; 0-不删除虚拟机的disk
+
+    "father_id": '2-3', # ‘0-0’代表无父任务，符号 '-' 前面: 父任务类型,  后面: 父任务ID!!!
+
+}
+
+# 制 作某快照某业务的虚拟机的任务
+
+{
+
+    "id":1, # 任务编号
+
+    "create_time":"2010-01-01 00:00:00", # 任 务创建时间
+
+    "age":3600,  # 任务有效期，单位秒
+
+    "type":4,       # 4-快 照虚拟机的任务
+
+    "vm_name":"xingyu", # 虚拟机的名称，虚拟机的名称，全网统一 命名
+
+    "snapshot_name":"xingyu_bk", # 制作的快照名称
+
+    "father_id": '2-3', # ‘0-0’代表无父任务，符号 '-' 前面: 父任务类型,  后面: 父任务ID!!!
+
+}
+
+# 恢 复某快照某业务的虚拟机的任务
+
+{
+
+    "id":1, # 任务编号
+
+    "create_time":"2010-01-01 00:00:00", # 任 务创建时间
+
+    "age":3600,  # 任务有效期，单位秒
+
+    "type":5,       # 5- 恢 复快照虚拟机的任务
+
+    "vm_name ":"xingyu", # 虚拟机的名称，虚拟机的名称，全网统一 命名
+
+    "snapshot_name":"xingyu_bk", # 从此快照的名称恢复
+
+    "father_id": '2-3', # ‘0-0’代表无父任务，符号 '-' 前面: 父任务类型,  后面: 父任务ID!!!
+
+}
+
+
+
+
+
+##### 以下功能已包含在 “新建某业务的虚拟机的任务” 任务中了
+
+# 克 隆某业务的虚拟机的任务
+
+{
+
+    "id":1, # 任务编号
+
+    "create_time": "2010-01-01 00:00:00", # 任 务创建时间
+
+    "age": 3600, # 任务有效期，单位秒，任务在有效期内才 能被认定和处理
+
+    "type": 6, # 6-克隆虚拟机的任务
+
+    "src_vm_name": "xingyu1", # 虚 拟机的名称，虚拟机的名称，全网统一命名
+
+    "des_vm_name": "xingyu2", # 新虚拟机的名称
+
+    "father_id": 1, # 如果出现此字段，表示连锁任务，内容为 父任务ID， 必须执行成功完父ID任 务，才能开始执行此任务
+
+}
+
+# 删除某快照某业务的虚拟机的任务
+
+{
+
+    "id":1, # 任务编号
+
+    "create_time":"2010-01-01 00:00:00", # 任 务创建时间
+
+    "age":3600,  # 任务有效期，单位秒
+
+    "type":7,       # 7- 删除快照虚拟机的任务
+
+    "vm_name ":"xingyu", # 虚拟机的名称，虚拟机的名称，全网统一 命名
+
+    "snapshot_name":"xingyu_bk", # 删除此名称的快照
+
+    "father_id": '2-3', # ‘0-0’代表无父任务，符号 '-' 前面: 父任务类型,  后面: 父任务ID!!!
+
+}
+
+# 为vm的网卡指定：网卡名字、ip
+
+{
+
+    "id":1, # 任务编号
+
+    "create_time":"2010-01-01 00:00:00", # 任 务创建时间
+
+    "age":3600,  # 任务有效期，单位秒
+
+    "type":8,       # 8－为vm的网卡指定：网卡名字、ip
+
+    "vm_name ":"xingyu", # 虚拟机的名称，虚拟机的名称，全网统一 命名
+
+    "bootproto": "static/dhcp",
+
+    "nic_name":"eth0", 
+
+    "ip":"192.168.1.100",  
+
+    "netmask": "255.255.255.0",
+
+    "gateway": "xxx.xxx.xxx.xxx",
+
+    "dns": "xxx.xxx.xxx.xxx",
+
+    "father_id": '2-3', # ‘0-0’代表无父任务，符号 '-' 前面: 父任务类型,  后面: 父任务ID!!!
+
+}
+
+
+
+# 控 制某业务的虚拟机的任务
+
+{
+
+    "id":1, # 任务编号
+
+    "create_time":"2010-01-01 00:00:00", # 任 务创建时间
+
+    "age":3600, # 任务有效期，单位秒，任务在有效期内才 能被认定和处理
+
+    "type":20, # 20-启动/停止......
+
+    "vm_name ":"xingyu", # 虚拟机的名称，虚拟机的名称，全网统一 命名
+
+    "boot_type" : 1   #1-以硬盘作为启动盘； 0-以cdrom作为启动盘
+
+    "action":"stop", # 动作，stop，start，reboot ......
+
+    "father_id": '2-3', # ‘0-0’代表无父任务，符号 '-' 前面: 父任务类型,  后面: 父任务ID!!!
+
+}
+
+# 建立下载任务
+
+{
+
+    "id": 1, # 任务编号
+
+    "create_time":"2010-01-01 00:00:00", # 任 务创建时间
+
+    "age": 3600, # 任务有效期，单位秒，任务在有效期内才 能被认定和处理
+
+    "type": 40, # 40--下载任务
+
+    "title":"download xingyu from cloud", # 任 务标题
+
+    uri: 'https://update.fxdata.cn/packet/xxx.tar.gz',  # 下载地址
+
+    size: 1000, # 文件大小
+
+    format: 1, # 0-- 普通文件， 1--tar压缩包
+
+    md5: 'f8adf8ea30cedd8bba01b3e0891a61e1' # 下载文件的md5校验值 
+
+    save_path: '/home/iso/', # 下载文件完成后存放地   
+
+   "father_id": '2-3', # ‘0-0’代表无父任务，符号 '-' 前面: 父任务类型,  后面: 父任务ID!!!
+
+}

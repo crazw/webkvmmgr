@@ -1,0 +1,52 @@
+{% extends "base.html"  %}
+{% block content  %}
+
+    <div class="row">
+        <!--左侧导航栏-->
+        <div class="col-sm-3 col-md-2 sidebar" >
+            <ul class="nav nav-sidebar">
+                <li {% ifequal tab 'overview' %} class="active" {% endifequal %}>
+                    <a href="/server/{{ sn }}/overview">
+                        设备总览
+                    </a>
+                </li>
+
+                <li {% ifequal tab 'instances' %} class="active" {% endifequal %}>
+                    <a href="/server/{{ sn }}/instances">
+                        虚机管理
+                    </a>
+                </li>
+
+                <li {% ifequal tab 'packages' %} class="active" {% endifequal %}>
+                    <a href="/server/{{ sn }}/packages">
+                        模板管理
+                    </a>
+                </li>
+
+                <li {% ifequal tab 'tasks' %} class="active" {% endifequal %}>
+                    <a href="/server/{{ sn }}/tasks">
+                        任务管理
+                    </a>
+                </li>
+
+                <hr class="devider"/>
+
+                <li {% ifequal tab 'setting' %} class="active" {% endifequal %}>
+                    <a href="/server/{{ sn }}/setting">
+                        配置中心
+                    </a>
+                </li>
+
+                <li {% ifequal tab 'logs' %} class="active" {% endifequal %}>
+                    <a href="/server/{{ sn }}/logs">
+                        操作日志
+                    </a>
+                </li>
+            </ul>
+        </div> <!--左侧导航栏-->
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main tab-content">
+            {% block right_content %}{% endblock %}
+        </div>
+    </div>
+
+{% endblock  %}

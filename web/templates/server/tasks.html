@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="panel panel-info overview-activities">
+        <div class="activities-inner">
+            <h4 class="activities-title">
+                最近完成<a href="/server/{{ sn }}/tasks_all" data-permalink="">查看全部</a>
+            </h4>
+            <ol class="activities-items">
+                {% for item in data.1 %}
+                <li>
+                    <span class="job-status successful"></span>
+                    <div class="job-details">
+                        <a class="job-action">{{ item.type.name }}</a>
+                        <span class="consumed">1秒之内</span>
+                        <span class="job-time">2016-05-07 12:38:55</span>
+                        <ul class="resources">
+                            <li>公网IP :<a class="id" href="/pek1/eips/eip-f5xe8f5r/" data-permalink="">pinax</a></li>
+                        </ul>
+                    </div>
+                </li>
+                {% endfor %}
+                <li><span class="job-status successful"></span>
+                    <div class="job-details">
+                        <a class="job-action" href="#" data-job-action="ReleaseEips">释放公网IP</a>
+                        <span class="consumed">1秒之内</span>
+                        <span class="job-time">2016-05-07 12:38:55</span>
+                        <ul class="resources">
+                            <li>公网IP :<a class="id" href="/pek1/eips/eip-f5xe8f5r/" data-permalink="">pinax</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><span class="job-status successful"></span>
+                    <div class="job-details">
+                        <a class="job-action" href="#" data-job-action="ReleaseEips">释放公网IP</a>
+                        <span class="consumed">1秒之内</span>
+                        <span class="job-time">2016-05-07 12:38:55</span>
+                        <ul class="resources">
+                            <li>公网IP :<a class="id" href="/pek1/eips/eip-f5xe8f5r/" data-permalink="">pinax</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+

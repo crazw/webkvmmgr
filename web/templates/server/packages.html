@@ -1,0 +1,45 @@
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr  class="active">
+                        <th>名称</th>
+                        <th>VM模板镜像名称</th>
+                        <th>CPUs</th>
+                        <th>CPU模式</th>
+                        <th>系统盘大小</th>
+                        <th>数据盘大小</th>
+                        <th>磁盘模式</th>
+                        <th>内存</th>
+                        <th>备注</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data %}
+                    <tr class="father-opt">
+                        <td class="sn hidden">{{ sn }}</td>
+                        <td class="id hidden">{{ item.id }}</td>
+                        <td class="name">{{ item.name }}</td>
+                        <td>{{ item.vm_file }}</td>
+                        <td>{{ item.cpu_num }}核</td>
+                        <td>{{ item.cpu_model }}</td>
+                        <td>{%  widthratio item.sys_disk_size 1073741824 1 %}GB</td>
+                        <td>{%  widthratio item.data_disk_size 1073741824 1 %}GB</td>
+                        <td>{{ item.disk_model }}</td>
+                        <td>{%  widthratio item.mem_size 1048576 1 %}MB</td>
+                        <td>{{ item.comment }}</td>
+                        <td>
+                            <a data-toggle="modal" name="edit" class="btn btn-sm btn-primary ios-edit-conf">
+                                <span class="glyphicon glyphicon-cog"></span>
+                            </a>
+
+                            <a data-toggle="modal" name="delete" class="btn btn-sm btn-danger iostemp-delete">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include 'server/modal_add_iostemp.html' %}
+

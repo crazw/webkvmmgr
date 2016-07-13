@@ -1,0 +1,86 @@
+<!-- 添加vmfile弹窗 -->
+            <div class="modal fade" id="addVmFile" tabindex="-1" role="dialog" aria-labelledby="addVmFileLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">添加镜像文件</h4>
+                        </div>
+
+                        <form action="/api/vmfile/" class="form-horizontal" method="post" role="form">
+
+                            <div class="modal-body">
+                                <div class="row">
+                                    <input type="hidden" class="sn" name="sn">
+                                    <input type="hidden" value="add" name="action">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">设备SN</label>
+                                        <div class="col-sm-6">
+                                            <label class="now-sn" for="disabledTextInput" style="padding: 8px;"></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required" style="text-align:justify">
+                                        <label class="col-sm-4 control-label">下载地址</label>
+
+                                        <div class="col-sm-6">
+                                            <input type="text" name="uri" class="form-control"
+                                                   placeholder="请输入文件的下载地址" required >
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required" style="text-align:justify">
+                                        <label class="col-sm-4 control-label">文件大小</label>
+
+                                        <div class="col-sm-6">
+                                            <input type="text" name="size" class="form-control"
+                                                   placeholder="请输入文件大小" required >
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="text-align:justify">
+                                        <label class="col-sm-4 control-label">文件格式</label>
+
+                                        <div class="col-sm-6">
+                                            <select name="format" class="form-control">
+                                                <option value ="0">iso</option>
+                                                <option value ="1">qcow2</option>
+                                                <option value ="2">其他</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required" style="text-align:justify">
+                                        <label class="col-sm-4 control-label">MD5</label>
+
+                                        <div class="col-sm-6">
+                                            <input type="text" name="md5" class="form-control"
+                                                   placeholder="文件的md5值" required >
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="text-align:justify">
+                                        <label class="col-sm-4 control-label">保存路径</label>
+
+                                        <div class="col-sm-6">
+                                            <select name="save_path" class="form-control">
+                                                <option value ="/img/iso">/img/iso</option>
+                                                <option value ="/img/template">/img/template</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <button type="submit" name="task_status" value=0 class="btn btn-sm btn-success">保存</button>
+                                <button type="submit" name="task_status" value=1 class="btn btn-sm btn-primary">保存且发布</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- 弹窗结束 -->

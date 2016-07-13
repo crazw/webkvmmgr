@@ -1,0 +1,289 @@
+                <table class="table">
+                    <thead>
+                        <tr  class="active">
+                            <th>别名</th>
+                            <th>总虚拟机</th>
+                            <th>在线虚拟机</th>
+                            <th>运行状态</th>
+                            <th>出口IP</th>
+                            <th>刷新时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="father-opt">
+                            <td class="name hidden">{{ data.0.name }}</td>
+                            <td class="sn hidden">{{ data.0.sn }}</td>
+                            <td class="alias">{{ data.0.alias }}</td>
+                            <td style="color:red">{{data.0.ins_server.count }}个</td>
+                            <td style="color:red">{{ data.1.runserver }}个</td>
+                            <td>
+                            {% if data.0.status == 1 %}
+                                    在线
+                                {% elif data.0.status == 0 %}
+                                    关机
+                                {% else %}
+                                    未知
+                                {% endif %}
+                            </td>
+                            <td>{{ data.0.ip }}</td>
+                            <td>{{ data.0.refresh | date:'Y-m-d H:i:s'}}</td>
+                            <td>
+                                <a data-toggle="modal" name="name" class="btn btn-sm btn-primary rename-name">
+                                    <span class="glyphicon glyphicon-education"></span>
+                                </a>
+                                <a data-toggle="modal" name="alias" class="btn btn-sm btn-primary rename-alias">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <div class="row">
+                    <div class="col-md-7">
+                        <!--panel面板，里面放置一些控件，下同-->
+                        <div class="panel panel-info">
+                            <!--panel面板的标题，下同-->
+                            <div class="panel-heading">
+                                <h3 class="panel-title">设备参数</h3>
+                            </div>
+                            <!--panel面板的内容，下同-->
+                            <div class="panel-body">
+                                <div class="col-md-7">
+                                    <dl class="dl-horizontal">
+                                      <dt>设备序列号</dt>
+                                      <dd>{{ data.0.sn }}</dd>
+                                    </dl>
+                                    <dl class="dl-horizontal">
+                                      <dt>业务包版本</dt>
+                                      <dd>{{ data.0.version }}</dd>
+                                    </dl>
+                                    <dl class="dl-horizontal">
+                                      <dt>hypervisor版本</dt>
+                                      <dd>{{ data.0.hv_version }}</dd>
+                                    </dl>
+
+                                    <dl class="dl-horizontal">
+                                      <dt>libvirt版本</dt>
+                                      <dd>{{ data.0.libvirt_version }}</dd>
+                                    </dl>
+
+
+                                    <dl class="dl-horizontal">
+                                      <dt>系统位数</dt>
+                                      <dd>{{ data.0.architecture }}</dd>
+                                    </dl>
+
+                                    <dl class="dl-horizontal">
+                                      <dt>CPU名称</dt>
+                                      <dd>{{ data.0.cpu_name|truncatewords:"2" }}</dd>
+                                    </dl>
+                                </div>
+                                <div class="col-md-5">
+
+                                    <dl class="dl-horizontal">
+                                      <dt>CPU核数</dt>
+                                      <dd>{{ data.0.cpu_num }}核</dd>
+                                    </dl>
+
+                                    <dl class="dl-horizontal">
+                                      <dt>内存大小</dt>
+                                      <dd>{%  widthratio data.0.mem_size 1073741824 1 %}GB</dd>
+                                    </dl>
+
+                                    <dl class="dl-horizontal">
+                                      <dt>磁盘大小</dt>
+                                      <dd>{%  widthratio data.0.disk_size 1099511627776 1 %}TB</dd>
+                                    </dl>
+
+                                    <dl class="dl-horizontal">
+                                      <dt>数据盘数量</dt>
+                                      <dd>{{ data.0.data_disk_num }}个</dd>
+                                    </dl>
+
+                                    <dl class="dl-horizontal">
+                                      <dt>磁盘利用率</dt>
+                                      <dd>{{ data.1.disk }}%</dd>
+                                    </dl>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="caption">
+                            <div class="panel panel-success">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">任务清单</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div id="task_stat" style="width: 105%;height:230%;"></div>
+                                </div>
+                            </div>
+                        </div> <!-- 我的任务-->
+                    </div>
+                </div>
+                <hr>
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a class="inst-bg-btn" href="#server_stat_tab" role="tab" data-toggle="tab">
+                            <span class="glyphicon glyphicon-dashboard"></span>&nbsp;性能监测
+                        </a>
+                    </li>
+                    <li>
+                        <a class="inst-bg-btn" href="#work_list" role="tab" data-toggle="tab">
+                            <span class="glyphicon glyphicon-briefcase"></span>&nbsp;支持镜像
+                        </a>
+                    </li>
+                    <li>
+                        <a class="inst-bg-btn" href="#other_list" role="tab" data-toggle="tab">
+                            <span class="glyphicon glyphicon-list"></span>&nbsp;其他信息
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" style="margin-left:3%;width:95%">
+                    <div class="tab-pane active" id="server_stat_tab">
+                        <div class="line">
+                            <div class="col-sm-4">
+                                <div id="cpu_stat" style="width: 100%;height:350%;"></div>
+                                <h5 style="text-align:center;margin-top:-60px; margin-bottom:60px;">CPU使用情况</h5>
+                            </div>
+                            <div class="col-sm-4">
+                                <div id="disk_stat" style="width: 100%;height:350%;"></div>
+                                <h5 style="text-align:center;margin-top:-60px; margin-bottom:60px;">磁盘使用情况</h5>
+                            </div>
+                            <div class="col-sm-4">
+                                <div id="mem_stat" style="width: 100%;height:350%;"></div>
+                                <h5 style="text-align:center;margin-top:-60px; margin-bottom:60px;">内存使用情况</h5>
+                            </div>
+                        </div>
+
+                        <hr class="devider"/>
+
+                        <div class="line">
+                            <div class="col-sm-6">
+                                <div id="io_stat_line" style="width: 100%;height:400%;"></div>
+                                <h5 style="text-align:center;margin-top:20px;">设备各个磁盘使用率(%util)</h5>
+                            </div>
+                            <div class="col-sm-6" align="center">
+                                <div id="server_net_stat_line" style="width: 100%;height:400%;"></div>
+                                <h5 style="text-align:center;margin-top:20px;">设备各个网卡上下行流速</h5>
+                            </div>
+                        </div>
+
+                        <hr class="devider"/>
+
+                        <div class="line">
+                            <div class="col-md-6">
+                                <div id="cpu_stat_line" style="width: 100%;height:350%;"></div>
+                                <h5 style="text-align:center;margin-top:20px;">CPU使用走势</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="mem_stat_line" style="width: 100%;height:350%;"></div>
+                                <h5 style="text-align:center;margin-top:20px;">内存使用走势</h5>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane fade" id="work_list">
+                        <div class="col-md-12">
+                            <br><br>
+                            <div class="caption">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading father-opt">
+                                        <span class="sn hidden">{{ sn }}</span>
+                                        <h3 class="panel-title">**{{ data.0.name }}**设备镜像列表</h3>
+                                        <a style="margin-top:-22px;"  data-toggle="modal" class="btn btn-sm btn-success pull-right add-vmfile">添加镜像文件</a>
+                                    </div>
+                                    <div class="panel-body">
+
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>名称</th>
+                                                    <th>大小</th>
+                                                    <th>镜像文件来源</th>
+                                                    <th>存放路径</th>
+                                                    <th>注释</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for vm_file in data.2 %}
+                                                <tr>
+                                                    <td>{{ vm_file.name }}</td>
+                                                    <td>{%  widthratio vm_file.size 1048576 1 %}MB</td>
+                                                    <td>
+                                                        {% if vm_file.source == 0 %}
+                                                            设备预装或FTP添加并下载完成
+                                                        {% elif vm_file.source == 1 %}
+                                                            FTP添加下载未完成
+                                                        {% else %}
+                                                            未知
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ vm_file.path }}</td>
+                                                    <td>{{ vm_file.comment }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="other_list">
+
+                        <div class="page-header ">
+                            <h4 style="text-align:center;margin-top:40px;">业务包版本</h4>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="active">
+                                        <th>名称</th>
+                                        <th>版本号</th>
+                                        <th>MD5</th>
+                                        <th>下载地址</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for work in data.3 %}
+                                    <tr>
+                                        <td>{{ work.name }}</td>
+                                        <td>{{ work.version }}</td>
+                                        <td>{{ work.md5 }}</td>
+                                        <td>{{ work.url }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="page-header">
+                            <h4 style="text-align:center;margin-top:40px;">配方列表</h4>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr  class="active">
+                                        <th>编号</th>
+                                        <th>注释</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for formula in data.4 %}
+                                    <tr>
+                                        <td>{{ formula.uuid }}</td>
+                                        <td>{{ formula.comment }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+                {% include 'server/modal_add_vmfile.html' %}

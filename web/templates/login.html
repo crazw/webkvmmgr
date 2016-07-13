@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static "images/favicon.ico" %}">
+{#    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">#}
+
+    <title>o(≧v≦)o~~好棒!登录吧!</title>
+    <link href="{% static "css/login.css" %} " rel="stylesheet">
+</head>
+<body class="login">
+    <form class="_1MGhWz1fBfY5yOL5WHk74Y" style="margin-top: 7%;"
+          action="/accounts/login/" method="post">
+{#        <h1 class="logo">飞享数据</h1>#}
+        <h4 class="title">虚拟化管理平台</h4>
+        <div class="warn-container">
+            <p class="warn">{{ error_msg }}</p>
+        </div>
+
+        <div class="form-row input-container username-container">
+            <input class="username" type="text" name="username" value="admin" placeholder="输入登录账号">
+        </div>
+        <div class="form-row input-container password-container">
+            <input class="password" type="password" name="password" placeholder="输入密码">
+        </div>
+        <div class="form-row save-account">
+            <input type="checkbox" name="keep-account" checked=""> 记住账号
+        </div>
+        <div class="form-row">
+            <button type="submit">登录</button>
+        </div>
+    </form>
+
+</body>
+</html>

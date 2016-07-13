@@ -1,0 +1,80 @@
+@charset "UTF-8";
+
+/**
+ *
+ * @authors Crazw (craazw@gmail.com)
+ * @date    2016-05-16 14:04:42
+ *
+ */
+
+/* 表格字体居中 */
+table tr th,td {
+    text-align: center;
+}
+
+ /* 左侧导航栏 */
+.sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #ddd;
+    border-right: 1px solid #eee;
+}
+
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+    color: #fff;
+    background-color: #428bca;
+}
+
+.main {
+    padding: 20px;
+}
+
+.main .page-header {
+    margin-top: 0;
+}
+
+.table-cst-header {
+    background:red;
+}
+
+/* 设备详情里面的tab样式 */
+.inst-bg-btn {
+    width: 200px;
+    text-align: center;
+}
+
+.inst-sm-btn {
+    width: 100;
+    text-align: center;
+}
+
+/* 必填字段提示的红点*/
+/* http://stackoverflow.com/questions/23141854/adding-asterisk-to-required-fields-in-bootstrap-3 */
+.form-group.required .control-label:after {
+    color: #d00;
+    content: "*";
+    position: absolute;
+    margin-left: 8px;
+    top:7px;
+}
+

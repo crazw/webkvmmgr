@@ -1,0 +1,6 @@
+<disk type='' device=''>
+    <driver name='qemu' type='' cache=''/>
+    <source />
+    <target dev='' bus=''/>
+</disk>
+

@@ -1,0 +1,50 @@
+<domain type='kvm'>
+  <name></name>
+  <memory unit='KiB'></memory>
+  <currentMemory unit='KiB'></currentMemory>
+  <vcpu placement='static'>4</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <clock offset='localtime'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <controller type='virtio-serial' index='0'>
+    </controller>
+    <controller type='usb' index='0'>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'/>
+    <channel type='unix'>
+      <source mode='bind' path='/var/lib/libvirt/qemu/'/>
+      <target type='virtio' name='org.qemu.guest_agent.0'/>
+    </channel>
+    <interface type='bridge'>
+      <source bridge='ovirtmgmt'/>
+      <model type='virtio'/>
+    </interface>
+    <interface type='bridge'>
+      <source bridge='ovirtmgmt'/>
+      <model type='virtio'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <graphics type='spice' autoport='yes' listen='0.0.0.0'>
+      <listen type='address' address='0.0.0.0'/>
+    </graphics>
+    <video>
+      <model type='vga' vram='16384' heads='1'/>
+    </video>
+    <memballoon model='none'/>
+  </devices>
+</domain>
+

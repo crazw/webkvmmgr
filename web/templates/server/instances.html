@@ -1,0 +1,90 @@
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr  class="active">
+                        <th>名称</th>
+                        <th>状态</th>
+                        <th>内核版本</th>
+                        <th>CPUs</th>
+                        <th>内存</th>
+                        <th>磁盘</th>
+                        <th>刷新时间</th>
+                        <th>操作</th>
+                        <th>其他</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data %}
+                    <tr class="father-opt {% ifequal item.islock 0 %} danger {% endifequal %}">
+                        <td class="sn hidden">{{ sn }}</td>
+                        <td class="name">{{ item.name }}</td>
+                        <td>
+                            {% if item.status == 1 %}
+                                运行
+                            {% elif item.status == 5 %}
+                                关机
+                            {% else %}
+                                配置调整中
+                            {% endif %}
+                        </td>
+                        <td>{{ item.kernel }}</td>
+                        <td>{{ item.cpu_num }}核</td>
+                        <td>{%  widthratio item.mem_size 1048576 1 %}MB</td>
+                        <td>{%  widthratio item.disk_size 1073741824 1 %}GB</td>
+                        <td>{{ item.refresh | date:'Y-m-d H:i:s' }}</td>
+                        <td>
+                            <a data-toggle="modal popover" name="start"
+                                {% if item.status != 5 or item.islock == 0 %}
+                                    class="btn btn-sm btn-default check-submit ins-start disabled"
+                                {% else %}
+                                    class="btn btn-sm btn-default check-submit ins-start"
+                                {% endif %}
+                            >
+                                <span class="glyphicon glyphicon-play"></span>
+                            </a>
+
+                            <a data-toggle="modal" name="stop"
+                                {% if item.status == 5 or item.islock == 0%}
+                                    class="btn btn-sm btn-default check-submit ins-stop disabled"
+                                {% else %}
+                                    class="btn btn-sm btn-default check-submit ins-stop"
+                                {% endif %}
+                            >
+                                <span class="glyphicon glyphicon-stop"></span>
+                            </a>
+
+                            <a data-toggle="modal" name="snapshot"
+                               {% if item.islock == 0 %}
+                               class="btn btn-sm btn-default ins-snapshot disabled"
+                               {% else %}
+                               class="btn btn-sm btn-default ins-snapshot"
+                               {% endif %}
+                            >
+                                <span class="glyphicon glyphicon-camera"></span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a data-toggle="modal" href="/instance/{{ item.server.sn }}/{{ item.name }}/overview/" class="btn btn-sm btn-primary ins-overview">
+                                <span>&nbsp;查看&nbsp;</span>
+                            </a>
+                            <a data-toggle="modal" href="/instance/{{ item.server.sn }}/{{ item.name }}/engine_setting/"  class="btn btn-sm btn-primary ins-install">
+                                <span>&nbsp;安装&nbsp;</span>
+                            </a>
+                            <a data-toggle="modal" href="/instance/{{ item.server.sn }}/{{ item.name }}/ins_setting/" class="btn btn-sm btn-primary ins-setting">
+                                <span>&nbsp;配置&nbsp;</span>
+                            </a>
+                            <a data-toggle="modal" name="delete"
+                               {% if item.islock == 0 %}
+                               class="btn btn-sm btn-danger ins-delete disabled"
+                               {% else %}
+                               class="btn btn-sm btn-danger ins-delete"
+                               {% endif %}
+                            >
+                                <span>&nbsp;删除&nbsp;</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'basic_task_modal.html' %}

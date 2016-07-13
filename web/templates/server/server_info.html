@@ -1,0 +1,462 @@
+{% extends "side_base.html"  %}
+{% load staticfiles  %}
+{% block title %}  设备{{ sn }}详情 - FxData{% endblock %}
+{% block style  %}
+    <link href="{% static "css/server.css" %} " rel="stylesheet">
+    {% if tab == 'tasks' or tab == 'tasks_all' %}
+        <link href="{% static "css/tasks.css" %} " rel="stylesheet">
+    {% endif %}
+{% endblock  %}
+{% block right_content  %}
+            <!--右侧管理控制台-->
+            <div class="page-header father-opt">
+                <span class="hidden sn">{{ sn }}</span>
+                {% if tab == 'packages' %}
+                <a style="margin-right:30px;"  data-toggle="modal" class="btn btn-sm btn-success pull-right create-ios-temp">创建镜像模板</a>
+                {% elif tab == 'tasks' or tab == 'tasks_all' %}
+                <a style="margin-right:30px;"  data-toggle="modal" class="btn btn-sm btn-success pull-right add-tasks-group">添加任务组</a>
+                {% else %}
+                    <a style="margin-right:30px;"  data-toggle="modal" class="btn btn-sm btn-success pull-right create-ins">创建虚拟机</a>
+                {% endif %}
+                <h1 style="margin-top:-6px;text-indent: 2em;">{{ name }}</h1>
+            </div>
+
+            <div class="">
+            {% if tab == 'overview' %}
+                {% include 'server/overview.html' %}
+            {% elif tab == 'tasks' %}
+                {% include 'server/tasks.html' %}
+            {% elif tab == 'tasks_all' %}
+                {% include 'server/tasks-all.html' %}
+            {% elif tab == 'setting' %}
+                {% include 'server/setting.html' %}
+            {% elif tab == 'logs' %}
+                {% include 'server/logs.html' %}
+            {% elif tab == 'packages' %}
+                {% include 'server/packages.html' %}
+            {% else %}
+                {% include 'server/instances.html' %}
+            {% endif %}
+            </div>
+
+            {% include 'basic_modal.html' %}
+            {% include 'create_ins_modal.html' %}
+{% endblock  %}
+
+{% block script %}
+    <script src="{% static 'js/server.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    {% if tab == 'overview' %}
+    <script>
+    // *** 宿主机任务统计图
+    var taskChart = echarts.init(document.getElementById('task_stat'));
+    task_option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            x: 'left',
+            data:['创建未发布','发布未领取','领取未完成','完成且成功','完成却失败','取消任务']
+        },
+        series: [
+            {
+                name:'任务类型',
+                type:'pie',
+                radius: ['70%', '90%'],
+                avoidLabelOverlap: false,
+                label: {
+                    normal: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            fontSize: '30',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data:[
+                    {value:{{ data.3.task0 }}, name:'创建未发布'},
+                    {value:{{ data.3.task1 }}, name:'发布未领取'},
+                    {value:{{ data.3.task2 }}, name:'领取未完成'},
+                    {value:{{ data.3.task3 }}, name:'完成且成功'},
+                    {value:{{ data.3.task4 }}, name:'完成却失败'},
+                    {value:{{ data.3.task5 }}, name:'取消任务'}
+                ]
+            }
+        ]
+    };
+    taskChart.setOption(task_option);
+
+    // *** 宿主机cpu图表
+    var cpuChart = echarts.init(document.getElementById('cpu_stat'));
+    var cpu_option = {
+        tooltip : {
+            formatter: "{a} <br/>{b} : {c}%"
+        },
+        series: [
+            {
+                name: 'CPU使用率',
+                type: 'gauge',
+                detail: {formatter:'{{ data.1.cpu }}%'},
+                data: [{value: {{ data.1.cpu }} }]
+            }
+        ]
+    };
+    cpuChart.setOption(cpu_option);
+
+    // *** 宿主机磁盘使用情况
+    var diskChart = echarts.init(document.getElementById('disk_stat'));
+    disk_option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+
+        series: [
+            {
+                name:'磁盘使用情况',
+                type:'pie',
+                selectedMode: 'single',
+                radius: [0, '30%'],
+
+                label: {
+                    normal: {
+                        position: 'inner'
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data:[
+                    {value:2048, name:'Sda', selected:true},
+                    {value:2048, name:'Sdb'},
+                    {value:2048, name:'Sdc'}
+                ]
+            },
+            {
+                name:'磁盘使用情况',
+                type:'pie',
+                radius: ['40%', '55%'],
+
+                data:[
+                    {value:335, name:'Sda使用'},
+                    {value:1713, name:'Sda空闲'},
+                    {value:846, name:'Sdb使用'},
+                    {value:1202, name:'Sdb空闲'},
+                    {value:1048, name:'Sdc使用'},
+                    {value:1000, name:'Sdc空闲'}
+                ]
+            }
+        ]
+    };
+    diskChart.setOption(disk_option);
+
+
+    // *** 宿主机内存图表
+    var memChart = echarts.init(document.getElementById('mem_stat'));
+    var mem_option = {
+        tooltip : {
+            formatter: "{a} <br/>{b} : {c}%"
+        },
+        series: [
+            {
+                name: '内存使用率',
+                type: 'gauge',
+                detail: {formatter:'{{ data.1.mem }}%'},
+                data: [{value: {{ data.1.mem }}}]
+            }
+        ]
+    };
+    memChart.setOption(mem_option);
+
+    // *** 宿主机cpu走势
+    var cpulineChart = echarts.init(document.getElementById('cpu_stat_line'));
+    var cpu_stat_option = {
+        tooltip : {
+            trigger: 'axis',
+            formatter: "{a} <br/>{b} : {c}%"
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : [
+                    '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00',
+                    '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
+                    '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ]
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel: {
+                    formatter: '{value} %'
+                },
+                max : '100',
+                min : '0'
+            }
+        ],
+        series : [
+            {
+                name:'CPU使用率',
+                type:'line',
+                areaStyle: {normal: {}},
+                data:[
+                    43, 56, 34, 71, 34, 23, 75, 98,
+                    20, 32, 11, 34, 90, 23, 61, 43,
+                    60, 12, 71, 34, 95, 20, 10, 12
+                ]
+            }
+        ]
+    };
+
+    cpulineChart.setOption(cpu_stat_option);
+
+    // *** 宿主机内存图表
+    var memlineChart = echarts.init(document.getElementById('mem_stat_line'));
+    var mem_stat_option = {
+        tooltip : {
+            trigger: 'axis',
+            formatter: "{a} <br/>{b} : {c}%"
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : [
+                    '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00',
+                    '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
+                    '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'
+                ]
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                axisLabel: {
+                    formatter: '{value} %'
+                },
+                max : '100',
+                min : '0'
+            }
+        ],
+        series : [
+            {
+                name:'内存使用率',
+                type:'line',
+                areaStyle: {normal: {}},
+                data:[
+                    60, 12, 71, 34, 95, 20, 10, 12,
+                    43, 56, 34, 71, 34, 23, 75, 98,
+                    20, 32, 11, 34, 90, 23, 61, 43
+                ]
+            }
+        ]
+    };
+
+    memlineChart.setOption(mem_stat_option);
+
+    // *** 宿主机磁盘util走势
+    var iolineChart = echarts.init(document.getElementById('io_stat_line'));
+    var timeData = [
+        '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00',
+        '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
+        '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00',
+    ];
+
+    // 截取Y轴字符串
+    timeData = timeData.map(function (str) {
+        return str.replace('2009/', '');
+    });
+
+    io_stat_option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            x : 'center',
+            y : 'bottom',
+            data:['Sda','Sdb','Sdc']
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: timeData
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} %'
+            },
+
+        },
+        series: [
+            {
+                name:'Sda',
+                type:'line',
+                data:[
+                    43, 56, 34, 71, 34, 23, 75, 98,
+                    20, 32, 11, 34, 90, 23, 61, 43,
+                    60, 12, 71, 34, 95, 20, 10, 12
+                ],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'}
+                    ]
+                }
+            },
+            {
+                name:'Sdb',
+                type:'line',
+                data: [
+                    60, 12, 71, 34, 95, 20, 10, 12,
+                    43, 56, 34, 71, 34, 23, 75, 98,
+                    20, 32, 11, 34, 90, 23, 61, 43
+                ],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                    ]
+                }
+            },
+            {
+                name:'Sdc',
+                type:'line',
+                data:[
+                    20, 32, 11, 34, 90, 23, 61, 43,
+                    60, 12, 71, 34, 95, 20, 10, 12,
+                    43, 56, 34, 71, 34, 23, 75, 98
+                ],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'}
+                    ]
+                }
+            }
+        ]
+    };
+    iolineChart.setOption(io_stat_option);
+
+    // *** 虚拟机各个设备网卡上下行流速
+    var netlineChart = echarts.init(document.getElementById('server_net_stat_line'));
+    var timeData = [
+        '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00',
+        '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
+        '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00',
+    ];
+
+    // 截取Y轴字符串
+    timeData = timeData.map(function (str) {
+        return str.replace('2009/', '');
+    });
+
+    net_stat_option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            x : 'center',
+            y : 'bottom',
+            data:['monitor_traffic_in','monitor_traffic_out','service_traffic_in','service_traffic_out']
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: timeData
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            },
+
+        },
+        series: [
+            {
+                name:'monitor_traffic_in',
+                type:'line',
+                data:[
+                    43, 56, 34, 71, 34, 23, 75, 98,
+                    20, 32, 11, 34, 90, 23, 61, 43,
+                    60, 12, 71, 34, 95, 20, 10, 12
+                ],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'}
+                    ]
+                }
+            },
+            {
+                name:'monitor_traffic_out',
+                type:'line',
+                data: [
+                    -60, -12, -71, -34, -95, -20, -10, -12,
+                    -43, -56, -34, -71, -34, -23, -75, -98,
+                    -20, -32, -11, -34, -90, -23, -61, -43
+                ],
+                markPoint: {
+                    data: [
+                        {type: 'min', name: '最小值'},
+                    ]
+                }
+            },
+            {
+                name:'service_traffic_in',
+                type:'line',
+                data:[
+                    20, 32, 11, 34, 90, 23, 61, 43,
+                    60, 12, 71, 34, 95, 20, 10, 12,
+                    43, 56, 34, 71, 34, 23, 75, 98
+                ],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'}
+                    ]
+                }
+            },
+            {
+                name:'service_traffic_out',
+                type:'line',
+                data: [
+                    -43, -56, -34, -71, -34, -23, -75, -98,
+                    -60, -12, -71, -34, -95, -20, -10, -12,
+                    -20, -32, -11, -34, -90, -23, -61, -43
+                ],
+                markPoint: {
+                    data: [
+                        {type: 'min', name: '最小值'},
+                    ]
+                }
+            }
+        ]
+    };
+    netlineChart.setOption(net_stat_option);
+
+    </script>
+    {% endif %}
+{% endblock  %}

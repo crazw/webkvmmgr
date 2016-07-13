@@ -1,0 +1,113 @@
+.overview-activities {
+    width: 35%;
+    float: right;
+}
+
+.overview-activities .activities-inner {
+    background: rgb(255,255,255);
+    padding: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.overview-activities .activities-title {
+    padding: 5px 0;
+}
+.activities-title {
+    padding: 5px 20px;
+    font-weight: 700;
+    margin: 0;
+}
+.activities-title a {
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+}
+
+.overview-activities .activities-items {
+    margin: 10px 0 0 10px;
+}
+
+.activities-items {
+    border-left: 3px solid #eee;
+    padding: 0 0 20px 20px;
+    margin: 20px 15px 10px 30px;
+}
+.activities-items .job-status {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3em;
+    margin-left: -31px;
+    margin-top: -2px;
+    float: left;
+    border: 3px solid #fff;
+}
+.activities-items .job-status.successful {
+    background: #57b382;
+    box-shadow: 0 0 0 1px #57b382;
+}
+
+.activities-items .job-details {
+    margin: 0 10px 20px 0;
+    background: #f8f8f8;
+    padding: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.activities-items .job-action {
+    color: #333;
+    font-size: 14px;
+}
+
+.activities-items .consumed {
+    font-size: 12px;
+    color: #777;
+    vertical-align: top;
+    background: #f8f8f8;
+    padding: 2px 6px;
+    -webkit-border-radius: 3em;
+    -moz-border-radius: 3em;
+    border-radius: 3em;
+    margin-top: -3px;
+    float: right;
+}
+
+.activities-items .job-time {
+    display: block;
+    font-size: 12px;
+    color: #777;
+    line-height: 1.8em;
+}
+
+.activities-items .resources {
+    color: #777;
+    margin: 10px 0;
+    line-height: 1.6em;
+}
+
+.activities-items .id {
+    padding: 0 5px;
+    border-radius: 2px;
+    background: #e7f4fb;
+    margin: 0 5px;
+}
+
+ol, ol li, ul, ul li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+/*--------------------------------*/
+.page-activities {
+    width: 80%;
+    margin: 20px auto;
+    background: rgb(255,255,255);
+    padding: 30px 0;
+}
+h4 {
+    font-size: 16px;
+}

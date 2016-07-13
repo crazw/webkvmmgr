@@ -1,0 +1,44 @@
+<div class="page-activities">
+    <div class="panel panel-info">
+        <div class="panel-body">
+            <h4 class="activities-title">操作日志<small><em style="margin-left:20px;font-size:12px">任务状态说明: 0-创建未发布, 1-发布未领取, 2-领取未完成, 3-完成且成功, 4-完成却失败, 5-取消</em></small></h4>
+
+            <ol class="activities-items">
+                <li></li>
+                {% for item in data.0 %}
+                <li>
+                    <span class="job-status successful"></span>
+                    <div class="job-details">
+                        <a class="job-action" data-job-action="ReleaseEips">{{ item.type.name }}</a>
+                        {% if item.end_time == '2016-01-01 00:00:00' %}
+                        <span class="job-time">{{ item.create_time }}</span>
+                        {% else %}
+                        <span class="consumed">完成</span>
+                        <span class="job-time">{{ item.create_time }} - {{ item.end_time }}</span>
+                        {% endif %}
+                        <ul class="resources">
+
+                            <li>
+                                关联虚拟机 :<a class="id">{{ item.instance.name }}</a>
+                                任务状态 :<a class="id">{{item.status}}</a>
+                            </li>
+                            <li>任务UUID :<a class="id">{{ item.uuid }}</a></li>
+                            {% if item.group_id %}
+                            <li>任务组ID :<a class="id">{{ item.group_id }}</a></li>
+                            {% endif %}
+                            {% if item.father_id %}
+                            <li>父任务ID :<a class="id">{{ item.father_id }}</a></li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </li>
+                {% endfor %}
+            </ol>
+
+            <button style="padding:2px; margin: 10px 10px;" value="{{ data.0 | length }}" class="btn btn-info task-more" href="#">加载更多</button>
+        </div>
+    </div>
+</div>
+
+

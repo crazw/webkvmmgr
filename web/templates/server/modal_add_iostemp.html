@@ -1,0 +1,126 @@
+<!-- 修改虚拟机别名弹窗 -->
+            <div class="modal fade" id="createIosTemp" tabindex="-1" role="dialog" aria-labelledby="createIosTempLabel" aria-hidden="true">
+                <div class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">添加镜像模板</h4>
+                        </div>
+
+                        <form action="/api/iostemp/" class="form-horizontal" method="post" role="form">
+
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="hidden" class="sn" name="sn">
+                                        <input type="hidden" class="action" name="action" value="create">
+
+                                        <div class="form-group required">
+                                            <label class="col-sm-4 control-label">设备SN</label>
+                                            <div class="col-sm-6">
+                                                <label class="now-sn" for="disabledTextInput" style="padding: 8px;"></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required" style="text-align:justify">
+                                            <label class="col-sm-4 control-label">名称</label>
+
+                                            <div class="col-sm-6">
+                                                <input type="text" name="name" class="form-control"
+                                                       pattern="^[a-z][\w]{2,19}$"
+                                                       placeholder="字母+数字且长度不小于3形式" required >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required" style="text-align:justify">
+                                            <label class="col-sm-4 control-label">操作系统</label>
+
+                                            <div class="col-sm-6">
+                                                <!--<input type="text" name="os" class="form-control" placeholder="操作系统" required > -->
+                                                <select name="os" class="form-control">
+                                                    {% for vm_file in vm_files_list %}
+                                                    <option value ="{{ vm_file.name }}">{{ vm_file.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required" style="text-align:justify">
+                                            <label class="col-sm-4 control-label">CPU核数</label>
+
+                                            <div class="col-sm-6">
+                                                <input type="text" name="cpu_num" class="form-control"
+                                                       placeholder="CPU核数" required >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required" style="text-align:justify">
+                                            <label class="col-sm-4 control-label">CPU模式</label>
+
+                                            <div class="col-sm-6">
+                                                <select name="cpu_model" class="form-control">
+                                                    <option value ="1">模式一</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group required" style="text-align:justify">
+                                            <label class="col-sm-4 control-label">系统盘大小</label>
+
+                                            <div class="col-sm-6">
+                                                <input type="text" name="sys_disk_size" class="form-control"
+                                                       placeholder="系统盘大小(GB)" required >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required" style="text-align:justify">
+                                            <label class="col-sm-4 control-label">数据盘大小</label>
+
+                                            <div class="col-sm-6">
+                                                <input type="text" name="data_disk_size" class="form-control"
+                                                       placeholder="数据盘大小(GB)" required >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required" style="text-align:justify">
+                                            <label class="col-sm-4 control-label">磁盘模式</label>
+
+                                            <div class="col-sm-6">
+                                                <select name="disk_model" class="form-control">
+                                                    <option value ="1">模式一</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required" style="text-align:justify">
+                                            <label class="col-sm-4 control-label">内存大小</label>
+
+                                            <div class="col-sm-6">
+                                                <input type="text" name="mem_size" class="form-control"
+                                                       placeholder="内存大小,单位是MB!" required >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" style="text-align:justify">
+                                            <label class="col-sm-4 control-label">备注信息</label>
+
+                                            <div class="col-sm-6">
+                                                <input type="text" name="comment" class="form-control"
+                                                       placeholder="咕~~(╯﹏╰)b.. 加点说明信息吧." >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                        data-dismiss="modal">取消</button>
+                                <button type="submit" class="btn btn-primary">确认</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- 修改虚拟机别名弹窗结束 -->

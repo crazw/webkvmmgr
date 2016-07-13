@@ -1,0 +1,109 @@
+<domain type='kvm' id='51'>
+  <name>cds</name>
+  <uuid>639f3a83-d54a-4ec1-a51d-1dbde1dc1895</uuid>
+  <memory unit='KiB'>2096128</memory>
+  <currentMemory unit='KiB'>2096128</currentMemory>
+  <vcpu placement='static' current='4'>12</vcpu>
+  <resource>
+    <partition>/machine</partition>
+  </resource>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-rhel7.0.0'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <clock offset='localtime'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none'/>
+      <source file='/home/louzhengwei/img/cds.qcow2'/>
+      <backingStore type='file' index='1'>
+        <format type='raw'/>
+        <source file='/home/louzhengwei/img/cds_template.qcow2'/>
+        <backingStore/>
+      </backingStore>
+      <target dev='hda' bus='virtio'/>
+      <alias name='virtio-disk0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none'/>
+      <source file='/home/louzhengwei/img/cds_data.qcow2'/>
+      <backingStore/>
+      <target dev='hdb' bus='virtio'/>
+      <alias name='virtio-disk1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <source file='/home/louzhengwei/iso/Campus-CDS-7.1.5.iso'/>
+      <backingStore/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+      <alias name='ide0-1-0'/>
+      <address type='drive' controller='0' bus='1' target='0' unit='0'/>
+    </disk>
+    <controller type='usb' index='0'>
+      <alias name='usb'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'>
+      <alias name='pci.0'/>
+    </controller>
+    <controller type='ide' index='0'>
+      <alias name='ide'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <interface type='bridge'>
+      <mac address='52:54:00:55:8e:d6'/>
+      <source bridge='ovsbr0'/>
+      <virtualport type='openvswitch'>
+        <parameters interfaceid='a7c7907c-980a-4faa-b740-a0038d95e2ff'/>
+      </virtualport>
+      <target dev='vnet0'/>
+      <model type='virtio'/>
+      <alias name='net0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <interface type='bridge'>
+      <mac address='52:54:00:a8:a9:38'/>
+      <source bridge='ovsbr0'/>
+      <virtualport type='openvswitch'>
+        <parameters interfaceid='23f1f4e9-9a44-4596-9dae-c623473a6f77'/>
+      </virtualport>
+      <target dev='vnet1'/>
+      <model type='virtio'/>
+      <alias name='net1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </interface>
+    <input type='tablet' bus='usb'>
+      <alias name='input0'/>
+    </input>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <graphics type='spice' port='5900' tlsPort='5903' autoport='yes' listen='0.0.0.0'>
+      <listen type='address' address='0.0.0.0'/>
+    </graphics>
+    <video>
+      <model type='vga' vram='16384' heads='1'/>
+      <alias name='video0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <memballoon model='none'>
+      <alias name='balloon0'/>
+    </memballoon>
+  </devices>
+  <seclabel type='dynamic' model='selinux' relabel='yes'>
+    <label>system_u:system_r:svirt_t:s0:c242,c889</label>
+    <imagelabel>system_u:object_r:svirt_image_t:s0:c242,c889</imagelabel>
+  </seclabel>
+</domain>
+

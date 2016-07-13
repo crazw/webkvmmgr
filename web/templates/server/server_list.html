@@ -1,0 +1,160 @@
+{% extends "base.html"  %}
+{% load staticfiles  %}
+{% block title %}  设备清单 - FxData{% endblock %}
+{% block style  %}
+    <link href="{% static "css/bootstrap-switch.min.css" %} " rel="stylesheet">
+    <link href="{% static "css/server.css" %} " rel="stylesheet">
+{% endblock  %}
+{% block content  %}
+
+<div style="width:90%;margin-left: auto;margin-right: auto">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-2"><h1>设备列表</h1></div>
+                <div class="col-xs-6"><br><br><h5>在线设备:{{ online_servers }}/{{ all_servers }}</h5></div>
+                <div class="col-xs-4">
+                    <br>
+                    <a data-toggle="modal" class="btn btn-success pull-right add-server">
+                        添加设备
+                    </a>
+                    <form class="navbar-form navbar-left" action=""  method="get" >
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input class="form-control" name="word" type="search" placeholder={{ word }}>
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form> <!-- 搜索框 -->
+                </div>
+            </div>
+
+            <hr style="width:100%">
+
+            {% if hosts_info %}
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th><a href="?word={{ word }}&sort={{ sort }}&order_by=sn">SN</a></th>
+                            <th><a href="?word={{ word }}&sort={{ sort }}&order_by=name">单位名称</a></th>
+                            <th><a href="?word={{ word }}&sort={{ sort }}&order_by=alias">别名</a></th>
+                            <th><a href="?word={{ word }}&sort={{ sort }}&order_by=cpu_num">CPU核数</a></th>
+                            <th><a href="?word={{ word }}&sort={{ sort }}&order_by=mem_size">内存总数</a></th>
+                            <th><a href="?word={{ word }}&sort={{ sort }}&order_by=disk_size">磁盘利用率</a></th>
+                            <th><a href="?word={{ word }}&sort={{ sort }}&order_by=data_disk_nums">数据盘数量</a></th>
+                            <th><a href="?word={{ word }}&sort={{ sort }}&order_by=status">状态</a></th>
+                            <th><a href="?word={{ word }}&sort={{ sort }}&order_by=refresh">刷新时间</a></th>
+                            <th>解锁/锁定</th>
+                            <th>配置</th>
+                            <th>管理</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in hosts_info  %}
+                        <tr class='father-opt  {% ifequal item.status 1 %} > {% else %} danger {% endifequal %} '>
+
+                            <td class="version hidden"> {{ item.version }} </td>
+                            <td class="architecture hidden"> {{ item.architecture }} </td>
+                            <td class="ip hidden"> {{ item.ip }} </td>
+                            <td class="libvirt_version hidden"> {{ item.libvirt_version }} </td>
+                            <td class="hv_version hidden"> {{ item.hv_version }} </td>
+                            <td class="cpu_name hidden"> {{ item.cpu_name }} </td>
+
+                            <td class="sn"> {{ item.sn }} </td>
+                            <td class="name"> {{ item.name }} </td>
+                            <td class="alias"> {{ item.alias }} </td>
+                            <td> {{ item.cpu_num }}核 </td>
+                            <td> {%  widthratio item.mem_size 1073741824 1 %}GB </td>
+                            <td> {%  widthratio item.disk_size 1099511627776 1 %}TB </td>
+                            <td> {{ item.data_disk_num }}个 </td>
+
+                            <td class="status">
+                                {% if item.status == 1 %}
+                                    在线
+                                {% elif item.status == 0 %}
+                                    关机
+                                {% endif %}
+                            </td>
+                            <td> {{ item.refresh | date:'Y-m-d H:i:s' }} </td>
+                            <td>
+                                <input value="{{ item.sn }}" type="checkbox"
+                                       data-size="mini" id="lock-server" name="lock-server"
+                                        {% ifequal item.islock 1 %} checked{% endifequal %}
+                                >
+                            </td>
+                            <td>
+                                <a data-toggle="modal" name="name" class="btn btn-sm btn-default rename-name">
+                                    <span class="glyphicon glyphicon-education"></span>
+                                </a>
+                                <a data-toggle="modal" name="alias" class="btn btn-sm btn-default rename-alias">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                                <a data-toggle="modal" class="btn btn-sm btn-default server-main-info">
+                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <form action="" method="post" role="form">
+                                    <a href="/server/{{ item.sn }}/overview/" class="btn btn-sm btn-primary">
+                                        <span>&nbsp;管理面板&nbsp;</span>
+                                    </a>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor  %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="col-sm-12">
+                    <div class="well">
+                        <h4>Oops. Ooo~~(╯﹏╰)b....</h4>
+                        <h4>No device found! So Bad!!!</h4>
+                    </div>
+                </div>
+            {% endif  %}
+            </div>
+        </div>
+    </div>
+
+    {% include 'basic_modal.html' %}
+
+<div>
+{% endblock  %}
+
+{% block script %}
+    <script src="{% static 'js/bootstrap-switch.min.js' %}"></script>
+    <script src="{% static 'js/server.js' %}"></script>
+    <script>
+
+    // 初始化server_list页锁定开关
+    $("[name='lock-server']").bootstrapSwitch();
+    $('input[name="lock-server"]').on('switchChange.bootstrapSwitch', function(event, state) {
+        var server_sn = this.value;
+        if(state == true){
+            var new_lock = 1;
+        }else{
+            var new_lock = 0;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/api/server/',
+            data: {'value': new_lock,'action': 'islock', 'sn': server_sn},
+            success: function(data) {
+                console.log('update lock status done');
+            },
+            error: function() {
+                console.log('update lock status failed');
+            },
+            complete: function() {
+                console.log('update completed');
+            }
+        });
+    });
+
+    </script>
+{% endblock  %}

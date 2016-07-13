@@ -1,0 +1,56 @@
+<!-- 修改虚拟机别名弹窗 -->
+            <div class="modal fade" id="createIns" tabindex="-1" role="dialog" aria-labelledby="createInsLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">添加虚拟机</h4>
+                        </div>
+
+                        <form action="/api/instance/" class="form-horizontal" method="post" role="form">
+
+                            <div class="modal-body">
+                                <input type="hidden" class="sn" name="sn">
+                                <input type="hidden" class="action" name="action" value="create">
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">设备SN</label>
+                                    <div class="col-sm-6">
+                                        <label class="now-sn" for="disabledTextInput" style="padding: 8px;"></label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group required" style="text-align:justify">
+                                    <label class="col-sm-4 control-label">虚拟机名称</label>
+
+                                    <div class="col-sm-6">
+                                        <input type="text" name="name"  class="form-control"
+                                               pattern="^[a-z][\w]{2,19}$"
+                                               placeholder="字母+数字且长度不小于3形式"
+                                               required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="text-align:justify">
+                                    <label class="col-sm-4 control-label">镜像模板</label>
+
+                                    <div class="col-sm-6">
+                                        <select name="iostemp" class="form-control">
+                                            {% for iostemp in iostemp_list %}
+                                            <option value ="{{ iostemp.name }}">{{ iostemp.comment }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <button type="submit" name="task_status" value=0 class="btn btn-sm btn-success">保存</button>
+                                <button type="submit" name="task_status" value=1 class="btn btn-sm btn-primary">保存且发布</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- 修改虚拟机别名弹窗结束 -->

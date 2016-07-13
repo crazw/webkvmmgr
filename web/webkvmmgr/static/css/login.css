@@ -1,0 +1,127 @@
+@charset "UTF-8";
+{% load staticfiles %}
+/**
+ *
+ * @authors Crazw (craazw@gmail.com)
+ * @date    2016-05-16 14:04:42
+ *
+ */
+
+body {
+    display: -webkit-box;
+    display: flex;
+    flex-flow: column;
+    min-height: 100%;
+    background-color: #F6F6F6;
+    font-family: "PingFang SC", 'Lucica Grande', 'Helvatica', 'Helvatica Neue', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Arial, serif;
+    font-size: 14px;
+    color: #333333;
+}
+
+body.login {
+    background-image: url(/static/images/bg.png);
+    background-size: cover;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y {
+    position: relative;
+    width: 460px;
+    height: 550px;
+    margin: 0 auto;
+    background-image: url(/static/images/main.png);
+    color: #fff;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .warn {
+    position: absolute;
+    top: 220px;
+    width: 100%;
+    background: hsla(0,0%,100%,.7);
+    color: red;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y button {
+    width: 100%;
+    height: 44px;
+    border-radius: 3px;
+    border: none;
+    background-color: #0f81c7;
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .input-container input[type=password], ._1MGhWz1fBfY5yOL5WHk74Y .input-container input[type=text] {
+    width: 100%;
+    height: 44px;
+    padding-left: 64px;
+    border-radius: 3px;
+    border: none;
+    background-color: #fff;
+    font: 18px HiraginoSansGB,Microsoft YaHei;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .logo {
+    width: 90px;
+    height: 19px;
+    margin: 21px 0 4px 30px;
+    background-image: url(/static/images/logo.png);
+    text-indent: -9999px;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .title {
+    margin: 90px 0 96px;
+    text-align: center;
+    font: 50px STHeitiSC-Medium,Microsoft YaHei;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .form-row {
+    width: 300px;
+    margin: 0 auto 14px;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .input-container {
+    position: relative;
+}
+
+
+._1MGhWz1fBfY5yOL5WHk74Y .username {
+    margin-bottom: 2px;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .input-container.username-container:after {
+    background-image: url(/static/images/username.svg);
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .input-container.password-container:after {
+    background-image: url(/static/images/password.svg);
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .input-container.username-container:after {
+    width: 18px;
+    height: 18px;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .input-container.password-container:after {
+    width: 17px;
+    height: 20px;
+}
+
+._1MGhWz1fBfY5yOL5WHk74Y .input-container:after {
+    content: ' ';
+    position: absolute;
+    top: 14px;
+    left: 25px;
+}
+
+
+
